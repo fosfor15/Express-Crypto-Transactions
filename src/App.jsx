@@ -5,31 +5,21 @@ import './styles/App.css';
 
 function App() {
     const [ status, setStatus ] = useState('');
-    const [ accounts, setAccounts ] = useState([]);
+    const [ connectedAccount, setConnectedAccounts ] = useState('');
 
+    // Подключение аккаунта
     const connectWallet = () => {
         ethereum.request({ method: 'eth_requestAccounts' })
-            .then(accounts => {
-                setAccounts(accounts);
-                console.log('accounts :>> ', accounts);
+            .then(account => {
+                setConnectedAccounts(account[0]);
+
+                const _status = status + 'Account is connected:\n' +
+                    account[0].replace(/^(0x\w{10})\w+(\w{4})$/,
+                        (m, start, end) => `${start}.....${end}\n`);
+                setStatus(_status);
             })
-            .catch(error => console.log('error :>> ', error));
+            .catch(error => console.log('Error :>> ', error));
     };
-
-    useMemo(() => {
-        if (accounts.length == 0) {
-            return;
-        }
-
-        const accountsShort = accounts.reduce((result, account, ind) =>
-            result + account.replace(/^(0x\w{10})\w+(\w{4})$/,
-                (m, start, end) => `${++ind}. ${start}.....${end}\n`)
-        , '');
-        
-        const _status = status + 'Accounts connected:\n' +
-            accountsShort;
-        setStatus(_status);
-    }, [ accounts ]);
 
     return (
         <div className="App">
@@ -44,7 +34,7 @@ function App() {
 
                 <div className="column-2">
                     <Button
-                        value="Connect wallet"
+                        value={ connectedAccount ? 'Connected' : 'Connect wallet' }
                         handleClick={ connectWallet }
                     />
                 </div>
