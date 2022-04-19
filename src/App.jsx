@@ -1,24 +1,30 @@
 import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
+
 import Button from './components/Button';
 import Input from './components/Input';
 import StatusOutput from './components/StatusOutput';
+
 import shortenAddress from './utils/shortenAddress';
 import convertToHex from './utils/convertToHex';
 import './styles/App.css';
 
+
 function App() {
     // Состояния глобальных данных
     const [ status, setStatus ] = useState('');
-    const [ connectedAccount, setConnectedAccounts ] = useState('');
+    const [ account, setAccounts ] = useState({ full: '', short: '' });
 
     // Подключение аккаунта
     const connectAccount = () => {
         ethereum.request({ method: 'eth_requestAccounts' })
             .then(accounts => {
-                if (accounts[0] == connectedAccount) return;
+                if (accounts[0] == account.full) return;
                 console.log('Accounts :>> ', accounts);
-                setConnectedAccounts(accounts[0]);
+                setAccounts({
+                    full: accounts[0],
+                    short: shortenAddress(accounts[0])
+                });
             })
             .catch(error => console.log('Error :>> ', error));
     };
@@ -27,17 +33,18 @@ function App() {
     useEffect(() => {
         ethereum.on('accountsChanged', accounts => {
             console.log('Accounts :>> ', accounts);
-            setConnectedAccounts(accounts[0]);
+            setAccounts({
+                full: accounts[0],
+                short: shortenAddress(accounts[0])
+            });
         });
     }, []);
 
     // Вывод подключения аккаунта
     useMemo(() => {
-        if (!connectedAccount) return;
-        const _status = status + 'Account is connected:\n' +
-            shortenAddress(connectedAccount);
-        setStatus(_status);
-    }, [ connectedAccount ]);
+        if (!account.short) return;
+        setStatus(status + `Account ${account.short} is connected\n`);
+    }, [ account.short ]);
 
 
     // Состояния и функции изменения параметров транзакции
@@ -69,7 +76,7 @@ function App() {
 
     // Запуск транзакции
     const startTransaction = () => {
-        if (!connectedAccount) {
+        if (!account) {
             setStatus(status + 'Connect account\n');
             return;
         }
@@ -90,7 +97,7 @@ function App() {
 
         const transactionParameters = {
             chainId: '0x38',
-            from: connectedAccount,
+            from: account.full,
             to: txAddress,
         
             value: convertToHex(txValue * 1e18),
@@ -161,21 +168,30 @@ function App() {
     // React-элемент
     return (
         <div className="App">
-            <h1>Express Automation Script</h1>
+            <div className="flex-container">
+                <h1>Express Automation</h1>
+                <div>
+                    
+                </div>
+            </div>
 
-            <div className="container">
-                <div className="column-1">
+            <div className="flex-container">
+                <div className="status-output">
                     <StatusOutput
                         status={ status }
                         setStatus={ setStatus }
                     />
                 </div>
 
-                <div className="column-2">
-                    <Button
-                        value={ connectedAccount ? 'Connected' : 'Connect wallet' }
-                        onClick={ connectAccount }
-                    />
+                <div className="control-interface">
+                    <div className="account-connection">
+                        <Button
+                            value={ account ? 'Connected' : 'Connect account' }
+                            onClick={ connectAccount }
+                        />
+                        <p>{ account.short }</p>
+                    </div>
+                    
                     <Input
                         type="text"
                         placeholder="Tx Address"

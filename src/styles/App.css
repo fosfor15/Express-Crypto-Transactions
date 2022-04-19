@@ -6,7 +6,7 @@
 }
 
 h1 {
-    margin: 50px 0;
+    margin: 50px auto;
     font-size: 40px;
     font-weight: 500;
     color: rgb(30, 30, 30);
@@ -17,25 +17,32 @@ h2 {
     text-align: left;
 }
 
-.container {
+.flex-container {
     display: flex;
 }
 
-.column-1 {
+.status-output {
     width: 500px;
 }
 
-.column-2 {
+.control-interface {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    margin-top: 44px;
+    margin-top: 38px;
     margin-left: 40px;
 }
-
-.column-2 button {
-    width: 150px;
+.control-interface button {
+    width: 170px;
 }
-.column-2 input {
+.control-interface input {
     width: 250px;
+}
+
+.account-connection {
+    height: 75px;
+    margin-bottom: 40px;
+}
+.account-connection p {
+    margin: 0;
 }

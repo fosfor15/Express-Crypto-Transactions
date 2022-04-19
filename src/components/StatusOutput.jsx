@@ -1,6 +1,8 @@
 import { useRef, useEffect } from 'react';
 import Button from './Button';
+
 import classes from '../styles/UI.module.css';
+
 
 function StatusOutput({ status, setStatus }) {
     const textarea = useRef();
@@ -10,7 +12,7 @@ function StatusOutput({ status, setStatus }) {
     }, [ status ]);
 
     return (
-        <div className="status-output">
+        <>
             <h2>Status output</h2>
 
             <textarea
@@ -20,13 +22,13 @@ function StatusOutput({ status, setStatus }) {
                 value={ status }
             ></textarea>
 
-            <div style={{ display: 'flex' }}>
+            <div className="flex-container">
                 <Button
                     value="Clear status"
                     onClick={ () => setStatus('') }
                 />
             </div>
-        </div>
+        </>
     );
 }
 
