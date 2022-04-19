@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
+import axios from 'axios';
 import Button from './components/Button';
 import Input from './components/Input';
 import StatusOutput from './components/StatusOutput';
@@ -7,14 +8,15 @@ import convertToHex from './utils/convertToHex';
 import './styles/App.css';
 
 function App() {
-    // Состояние глобальных данных
+    // Состояния глобальных данных
     const [ status, setStatus ] = useState('');
     const [ connectedAccount, setConnectedAccounts ] = useState('');
 
     // Подключение аккаунта
-    const connectWallet = () => {
+    const connectAccount = () => {
         ethereum.request({ method: 'eth_requestAccounts' })
             .then(accounts => {
+                if (accounts[0] == connectedAccount) return;
                 console.log('Accounts :>> ', accounts);
                 setConnectedAccounts(accounts[0]);
             })
@@ -29,7 +31,7 @@ function App() {
         });
     }, []);
 
-    // Вывод подключение аккаунта в статус
+    // Вывод подключения аккаунта
     useMemo(() => {
         if (!connectedAccount) return;
         const _status = status + 'Account is connected:\n' +
@@ -38,14 +40,14 @@ function App() {
     }, [ connectedAccount ]);
 
 
-    // Состояние параметров транзакции
+    // Состояния и функции изменения параметров транзакции
     const [ txAddress, setTxAddress ] = useState('');
     const [ txValue, setTxValue ] = useState('');
-    const [ txHashes, setTxHashes ] = useState([]);
+    const [ txHash, setTxHash ] = useState('');
 
     const changeTxAddress = (event) => {
         if (!/^0x/.test(event.target.value)) {
-            console.log('Error in Tx Address');
+            setStatus(status + 'Error in Tx Address\n');
             return;
         }
         setTxAddress(event.target.value);
@@ -57,8 +59,9 @@ function App() {
     };
 
     const shortenTxAddressOutput = (event) => {
+        if (!event.target.value) return;
         event.target.value = shortenAddress(event.target.value);
-    };    
+    };
 
     const changeTxValue = (event) => {
         setTxValue(event.target.value);
@@ -101,12 +104,57 @@ function App() {
             params: [ transactionParameters ]
         })
         .then(txHash => {
-            setStatus(status + 'Tx Hash\n' + txHash);
-            setTxHashes([ ...txHashes, txHash ]);
-            setTxAddress('');
-            setTxValue('');
+            console.log('txHash :>> ', txHash);
+            setStatus(status + 'Tx Hash\n' + txHash + '\n');
+            setTxHash(txHash);
+            getTxStatus(txHash);
         })
         .catch(error => console.log('Error :>> ', error));
+    };
+
+
+    // Функция для проверки статуса транзакции
+    const getTxStatus = (txHash) => {
+        console.log('txHash :>> ', txHash);
+
+        const config = {
+            method: 'GET',
+            baseURL: 'https://api.bscscan.com/api'  ,
+            params: {
+                module: 'transaction',
+                action: 'gettxreceiptstatus',
+                txhash: txHash,
+                apikey: '1JXXWEI5FCHWUBFRNAIN89K7DKWMQX5R7R'
+            }
+        };
+        console.log('config :>> ', config);
+
+        const sendRequest = () => {
+            setTimeout(() => {
+                sendRequest.count++;
+                
+                axios(config).then(response => {
+                    console.log(`Result ${sendRequest.count} :>> `, response.data.result.status);
+        
+                    if (response.data.result.status == '1') {
+                        setStatus(status + `Try ${sendRequest.count}\n`
+                            + 'Transaction is completed!\n');
+                    } else {
+                        setStatus(status + `Try ${sendRequest.count}\n`
+                            + 'Transaction is failed!\n');
+    
+                        if (sendRequest.count < 15) {
+                            sendRequest();
+                        } else {
+                            startTransaction();
+                        }
+                    }
+                });
+            }, 2e3);
+        };
+        sendRequest.count = 0;
+
+        sendRequest();
     };
 
 
@@ -126,7 +174,7 @@ function App() {
                 <div className="column-2">
                     <Button
                         value={ connectedAccount ? 'Connected' : 'Connect wallet' }
-                        onClick={ connectWallet }
+                        onClick={ connectAccount }
                     />
                     <Input
                         type="text"
