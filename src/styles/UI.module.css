@@ -1,17 +1,26 @@
 
-.button {
-    padding: 2px 8px;
+.button,
+.input,
+.textarea {
+    margin-bottom: 8px;
     border: 1px solid #686868;
     border-radius: 4px;
     background-color: #faffd7;
     font-size: 20px;
     color: #1e1e1e;
+}
+
+.button {    
+    padding: 2px 8px;
     cursor: pointer;
     transition: .25s;
 }
-
 .button:hover {
     background-color: #dbfff0;
+}
+
+.input {
+    padding: 2px 8px;
 }
 
 .textarea {
@@ -19,8 +28,4 @@
     min-height: 400px;
     resize: vertical;
     padding: 8px;
-    background-color: #faffd7;
-    border: 1px solid #686868;
-    border-radius: 4px;
-    font-size: 20px;
 }

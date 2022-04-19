@@ -12,15 +12,30 @@ h1 {
     color: rgb(30, 30, 30);
 }
 
+h2 {
+    margin: 0 0 8px;
+    text-align: left;
+}
+
 .container {
     display: flex;
 }
 
 .column-1 {
-    flex-grow: 1;
+    width: 500px;
 }
 
 .column-2 {
-    width: 200px;
-    margin-left: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-top: 44px;
+    margin-left: 40px;
+}
+
+.column-2 button {
+    width: 150px;
+}
+.column-2 input {
+    width: 250px;
 }
