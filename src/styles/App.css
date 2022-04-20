@@ -7,6 +7,7 @@
 
 h1 {
     margin: 50px auto;
+    flex-grow: 1;
     font-size: 40px;
     font-weight: 500;
     color: rgb(30, 30, 30);
@@ -19,6 +20,17 @@ h2 {
 
 .flex-container {
     display: flex;
+}
+
+.first-row {
+    align-items: center;
+}
+
+.clock {
+    display: grid;
+    grid-template-columns: 80px 70px;
+    margin-right: 50px;
+    text-align: left;
 }
 
 .status-output {

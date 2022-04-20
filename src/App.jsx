@@ -3,6 +3,7 @@ import axios from 'axios';
 
 import Button from './components/Button';
 import Input from './components/Input';
+import Clock from './components/Clock';
 import StatusOutput from './components/StatusOutput';
 
 import shortenAddress from './utils/shortenAddress';
@@ -168,11 +169,9 @@ function App() {
     // React-элемент
     return (
         <div className="App">
-            <div className="flex-container">
+            <div className="first-row flex-container">
                 <h1>Express Automation</h1>
-                <div>
-                    
-                </div>
+                <Clock />
             </div>
 
             <div className="flex-container">
