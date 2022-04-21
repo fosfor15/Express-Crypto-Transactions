@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import useInterval from '../hooks/useInterval';
 
 const time = new Date();
 
@@ -12,13 +13,10 @@ const getTimeString = (time) => {
 const Clock = () => {
     const [ timeString, setTimeString ] = useState(getTimeString(time));
 
-    useEffect(() => {
-        let intervalId = setInterval(() => {
-            time.setTime(Date.now());
-            setTimeString(getTimeString(time));
-        }, 1e3);
-        return () => clearInterval(intervalId);
-    }, []);
+    useInterval(() => {
+        time.setTime(Date.now());
+        setTimeString(getTimeString(time));
+    }, 1e3);
 
     return (
         <div className="clock">
