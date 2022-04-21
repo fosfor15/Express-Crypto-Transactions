@@ -77,7 +77,7 @@ function App() {
 
     // Запуск транзакции
     const startTransaction = () => {
-        if (!account) {
+        if (!account.full) {
             setStatus(status + 'Connect account\n');
             return;
         }
@@ -170,7 +170,7 @@ function App() {
     return (
         <div className="App">
             <div className="first-row flex-container">
-                <h1>Express Automation</h1>
+                <h1>Express Crypto Transactions</h1>
                 <Clock />
             </div>
 
