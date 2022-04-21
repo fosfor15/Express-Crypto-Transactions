@@ -175,41 +175,41 @@ function App() {
             </div>
 
             <div className="flex-container">
-                <div className="status-output">
-                    <StatusOutput
-                        status={ status }
-                        setStatus={ setStatus }
-                    />
-                </div>
+                <StatusOutput
+                    status={ status }
+                    setStatus={ setStatus }
+                />
 
                 <div className="control-interface">
                     <div className="account-connection">
                         <Button
-                            value={ account ? 'Connected' : 'Connect account' }
+                            value={ account.full ? 'Connected' : 'Connect account' }
                             onClick={ connectAccount }
                         />
-                        <p>{ account.short }</p>
+                        <div>{ account.short }</div>
                     </div>
                     
-                    <Input
-                        type="text"
-                        placeholder="Tx Address"
-                        onChange={ changeTxAddress }
-                        onFocus={ extendTxAddressOutput }
-                        onBlur={ shortenTxAddressOutput }
-                    />
-                    <Input
-                        type="number"
-                        step="1e-2"
-                        min="0"
-                        placeholder="Tx Value"
-                        value={ txValue }
-                        onChange={ changeTxValue }
-                    />
-                    <Button
-                        value="Start"
-                        onClick={ startTransaction }
-                    />
+                    <div className="transaction-control">
+                        <Input
+                            type="text"
+                            placeholder="Tx Address"
+                            onChange={ changeTxAddress }
+                            onFocus={ extendTxAddressOutput }
+                            onBlur={ shortenTxAddressOutput }
+                        />
+                        <Input
+                            type="number"
+                            step="1e-5"
+                            min="0"
+                            placeholder="Tx Value"
+                            value={ txValue }
+                            onChange={ changeTxValue }
+                        />
+                        <Button
+                            value="Start"
+                            onClick={ startTransaction }
+                        />
+                    </div>
                 </div>
             </div>
         </div>

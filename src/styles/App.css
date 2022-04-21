@@ -2,7 +2,6 @@
 .App {
     width: 800px;
     margin: 0 auto;
-    text-align: center;
 }
 
 h1 {
@@ -15,7 +14,6 @@ h1 {
 
 h2 {
     margin: 0 0 8px;
-    text-align: left;
 }
 
 .flex-container {
@@ -40,21 +38,22 @@ h2 {
 .control-interface {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
     margin-top: 38px;
     margin-left: 40px;
 }
-.control-interface button {
-    width: 170px;
-}
-.control-interface input {
-    width: 250px;
-}
 
 .account-connection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     height: 75px;
     margin-bottom: 40px;
 }
-.account-connection p {
-    margin: 0;
+
+.transaction-control {
+    display: flex;
+    flex-direction: column;
+}
+.transaction-control button {
+    margin-top: 12px;
 }

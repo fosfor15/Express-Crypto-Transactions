@@ -12,7 +12,7 @@ function StatusOutput({ status, setStatus }) {
     }, [ status ]);
 
     return (
-        <>
+        <div className="status-output">
             <h2>Status output</h2>
 
             <textarea
@@ -28,7 +28,7 @@ function StatusOutput({ status, setStatus }) {
                     onClick={ () => setStatus('') }
                 />
             </div>
-        </>
+        </div>
     );
 }
 
