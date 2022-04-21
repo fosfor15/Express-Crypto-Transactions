@@ -5,6 +5,7 @@ import IndicatorButton from './IndicatorButton';
 import Input from './Input';
 
 import useInterval from '../hooks/useInterval';
+import refreshIcon from '../assets/refresh-button-svgrepo-com.svg';
 import '../styles/GasPrices.css';
 
 
@@ -15,17 +16,17 @@ function GasPrices({ gasParams, setTxGasPrice, setTxGasLimit }) {
         fast: 0
     });
 
-    const getGasPrices = async () => {
-        const config = {
-            method: 'GET',
-            baseURL: 'https://api.bscscan.com/api'  ,
-            params: {
-                module: 'gastracker',
-                action: 'gasoracle',
-                apikey: '1JXXWEI5FCHWUBFRNAIN89K7DKWMQX5R7R'
-            }
-        };
+    const config = {
+        method: 'GET',
+        baseURL: 'https://api.bscscan.com/api'  ,
+        params: {
+            module: 'gastracker',
+            action: 'gasoracle',
+            apikey: '1JXXWEI5FCHWUBFRNAIN89K7DKWMQX5R7R'
+        }
+    };
 
+    const getGasPrices = async () => {
         const response = await axios(config);
         const {
             SafeGasPrice: safe,
@@ -42,6 +43,15 @@ function GasPrices({ gasParams, setTxGasPrice, setTxGasLimit }) {
 
     useInterval(getGasPrices, 5e3);
 
+    const refreshGasPrices = () => {
+        setGasPrices({
+            safe: 0,
+            propose: 0,
+            fast: 0
+        });
+        getGasPrices();
+    };
+
 
     return (
         <div className="gas-prices">
@@ -57,6 +67,11 @@ function GasPrices({ gasParams, setTxGasPrice, setTxGasLimit }) {
                 <IndicatorButton
                     value={ 'F: ' + gasPrices.fast }
                     onClick={ setTxGasPrice }
+                />
+                <img
+                    src={ refreshIcon }
+                    alt="refresh-icon"
+                    onClick={ refreshGasPrices }
                 />
             </div>
 

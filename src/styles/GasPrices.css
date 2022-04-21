@@ -9,6 +9,18 @@
     margin: 10px 0;
 }
 
+img {
+    box-sizing: content-box;
+    width: 16px;
+    margin: 0 6px;
+    padding: 4px;
+    cursor: pointer;
+    transition: transform .5s;
+}
+img:hover {
+    transform: rotate(1turn) scale(1.05);
+}
+
 .indicator-button {
     width: fit-content;
     min-width: 70px;
