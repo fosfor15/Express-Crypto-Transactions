@@ -11,7 +11,7 @@ const getTimeString = (time) => {
 }
 
 const Clock = () => {
-    const [ timeString, setTimeString ] = useState(getTimeString(time));
+    const [ timeString, setTimeString ] = useState('');
 
     useInterval(() => {
         time.setTime(Date.now());

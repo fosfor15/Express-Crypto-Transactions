@@ -1,0 +1,33 @@
+
+.gas-prices {
+    display: flex;
+    flex-direction: column;
+}
+
+.indicator-buttons {
+    display: flex;
+    margin: 10px 0;
+}
+
+.indicator-button {
+    width: fit-content;
+    min-width: 70px;
+    margin: 0 4px;
+    padding: 3px 8px;
+    border: 1px solid #686868;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    transition: .25s;
+}
+.indicator-button:hover {
+    background-color: #adffddac;
+}
+
+.inputs {
+    display: flex;
+    justify-content: space-between;
+}
+.inputs input {
+    width: 132px;
+}

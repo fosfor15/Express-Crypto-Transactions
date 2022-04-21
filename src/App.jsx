@@ -1,10 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 
-import Button from './components/Button';
-import Input from './components/Input';
 import Clock from './components/Clock';
 import StatusOutput from './components/StatusOutput';
+import Button from './components/Button';
+import Input from './components/Input';
+import GasPrices from './components/GasPrices';
 
 import shortenAddress from './utils/shortenAddress';
 import convertToHex from './utils/convertToHex';
@@ -50,8 +51,7 @@ function App() {
 
     // Состояния и функции изменения параметров транзакции
     const [ txAddress, setTxAddress ] = useState('');
-    const [ txValue, setTxValue ] = useState('');
-    const [ txHash, setTxHash ] = useState('');
+    const [ txValue, setTxValue ] = useState('');    
 
     const changeTxAddress = (event) => {
         if (!/^0x/.test(event.target.value)) {
@@ -74,6 +74,32 @@ function App() {
     const changeTxValue = (event) => {
         setTxValue(event.target.value);
     };
+
+    
+    // Состояние и функции установки комиссии за транзакцию в параметры транзакции
+    const [ gasParams, setGasParams ] = useState({ price: '', limit: 21e3 });
+
+    const setTxGasPrice = (event) => {        
+        const gasPrice = event.target.tagName == 'DIV' ?
+            event.target.innerText.match(/\d+/)[0] :
+            event.target.value;
+
+        setGasParams({
+            ...gasParams,
+            price: gasPrice
+        });
+    };
+    
+    const setTxGasLimit = (event) => {
+        setGasParams({
+            ...gasParams,
+            limit: event.target.value
+        });
+    };
+
+
+    // Состояние хеша транзакции
+    const [ txHash, setTxHash ] = useState('');
 
     // Запуск транзакции
     const startTransaction = () => {
@@ -100,11 +126,9 @@ function App() {
             chainId: '0x38',
             from: account.full,
             to: txAddress,
-        
             value: convertToHex(txValue * 1e18),
-        
-            gasPrice: convertToHex(5e9),
-            gas: convertToHex(21e3)
+            gasPrice: convertToHex(gasParams.price * 1e9),
+            gas: convertToHex(gasParams.limit)
         };
 
         ethereum.request({
@@ -119,7 +143,6 @@ function App() {
         })
         .catch(error => console.log('Error :>> ', error));
     };
-
 
     // Функция для проверки статуса транзакции
     const getTxStatus = (txHash) => {
@@ -205,6 +228,13 @@ function App() {
                             value={ txValue }
                             onChange={ changeTxValue }
                         />
+
+                        <GasPrices
+                            gasParams={ gasParams }
+                            setTxGasPrice={ setTxGasPrice }
+                            setTxGasLimit={ setTxGasLimit }
+                        />
+
                         <Button
                             value="Start"
                             onClick={ startTransaction }
