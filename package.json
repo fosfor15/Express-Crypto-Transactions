@@ -2,10 +2,13 @@
     "name": "express-crypto-transactions",
     "private": true,
     "version": "0.1.0",
+    "homepage": "https://fosfor15.github.io/Express-Crypto-Transactions",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d dist"
     },
     "dependencies": {
         "axios": "^0.26.1",
@@ -16,6 +19,7 @@
         "@types/react": "^18.0.0",
         "@types/react-dom": "^18.0.0",
         "@vitejs/plugin-react": "^1.3.0",
+        "gh-pages": "^3.2.3",
         "vite": "^2.9.5"
     }
 }

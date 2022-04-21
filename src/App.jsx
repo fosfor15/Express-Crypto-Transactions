@@ -112,7 +112,7 @@ function App() {
             params: [ transactionParameters ]
         })
         .then(txHash => {
-            console.log('txHash :>> ', txHash);
+            console.log('Tx Hash :>> ', txHash);
             setStatus(status + 'Tx Hash\n' + txHash + '\n');
             setTxHash(txHash);
             getTxStatus(txHash);
